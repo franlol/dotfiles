@@ -1,0 +1,20 @@
+[global_config]
+[keybindings]
+[profiles]
+  [[default]]
+    background_darkness = 0.92
+    background_type = transparent
+    font = JetBrainsMono Nerd Font Medium 10
+    show_titlebar = False
+    palette = "#000000:#f66151:#57e389:#ffe71a:#62a0ea:#75507b:#00b2ff:#d3d7cf:#555753:#f66151:#57e389:#fce94f:#729fcf:#c061cb:#1c71d8:#eeeeec"
+    use_system_font = False
+[layouts]
+  [[default]]
+    [[[window0]]]
+      type = Window
+      parent = ""
+    [[[child1]]]
+      type = Terminal
+      parent = window0
+      profile = passion
+[plugins]

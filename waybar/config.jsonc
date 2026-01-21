@@ -1,0 +1,53 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 30,
+
+  "modules-left": ["hyprland/workspaces"],
+  "modules-center": ["clock"],
+  "modules-right": [
+    "pulseaudio",
+    "network",
+    "battery",
+    "tray"
+  ],
+
+  "hyprland/workspaces": {
+    "format": "{icon}",
+    "on-click": "activate",
+    "format-icons": {
+      "1": "",
+      "2": "",
+      "3": "",
+      "4": "󰙯",
+      "5": "󰎆",
+      "default": ""
+    }
+  },
+
+  "clock": {
+    "format": "  {:%H:%M}"
+  },
+
+  "pulseaudio": {
+    "format": "  {volume}%",
+    "format-muted": "󰝟 muted",
+    "on-click": "pavucontrol"
+  },
+
+  "network": {
+    "format-wifi": "  {signalStrength}%",
+    "format-ethernet": "󰈀  wired",
+    "format-disconnected": "󰖪  off",
+    "on-click": "/home/franlol/.config/waybar/wifi-menu.sh"
+  },
+
+  "battery": {
+    "format": "  {capacity}%",
+    "states": {
+      "warning": 30,
+      "critical": 15
+    }
+  }
+}
+

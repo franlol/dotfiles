@@ -1,0 +1,144 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 16,
+    "spacing": 0,
+    "margin-top": 2,
+    "margin-left": 10,
+    "margin-right": 10,
+
+    "modules-left": ["hyprland/workspaces", "custom/separator", "hyprland/window"],
+    "modules-center": ["clock", "tray"],
+    "modules-right": ["cpu", "memory", "temperature", "disk", "battery", "custom/powermode", "backlight", "network", "pulseaudio", "mpris"],
+
+    "hyprland/workspaces": {
+        "active-only": false,
+        "all-outputs": false,
+        "format": "{name}",
+        "persistent-workspaces": {
+            "1": [],
+            "2": [],
+            "3": [],
+            "4": [],
+            "5": []
+        }
+    },
+
+    "hyprland/window": {
+        "format": "<span foreground='#f9e2af' font-style='italic'>{}</span>",
+        "max-length": 50,
+        "rewrite": {
+            "(.*) \u2014 Mozilla Firefox": " $1",
+            "(.*) - Visual Studio Code": " $1"
+        }
+    },
+
+    "clock": {
+        "format": "{:%H:%M}",
+        "format-alt": "{:%A, %B %d, %Y (%R)}",
+        "tooltip-format": "<tt><small>{calendar}</small></tt>",
+        "calendar": {
+            "mode": "year",
+            "mode-mon-col": 3,
+            "weeks-pos": "right",
+            "format": {
+                "months": "<span color='#ffead3'><b>{}</b></span>",
+                "days": "<span color='#ecc6d9'><b>{}</b></span>",
+                "weeks": "<span color='#99ffdd'><b>W{}</b></span>",
+                "weekdays": "<span color='#ffcc66'><b>{}</b></span>",
+                "today": "<span color='#ff6699'><b><u>{}</u></b></span>"
+            }
+        }
+    },
+
+    "tray": {
+        "icon-size": 32,
+        "spacing": 0
+    },
+
+    "backlight": {
+        "format": "<span size='180%' rise='-2800'>󱍖</span> {percent}%",
+        "interval": 2,
+        "on-scroll-up": "brightnessctl set +5%",
+        "on-scroll-down": "brightnessctl set 5%-"
+    },
+
+    "temperature": {
+        "critical-threshold": 80,
+        "format": "<span size='160%' rise='-2500'></span> {temperatureC}°C",
+        "interval": 5,
+        "tooltip-format": "Core: {temperatureC}°C"
+    },
+
+    "cpu": {
+        "format": "<span size='160%' rise='-2500'></span> {usage}%",
+        "interval": 2,
+        "tooltip": true
+    },
+
+    "memory": {
+        "format": "<span size='160%' rise='-2500'></span> {used:.1f}GB",
+        "interval": 2,
+        "tooltip-format": "Memory: {used}GB / {total}GB\nSwap: {swapUsed}GB / {swapTotal}GB"
+    },
+
+    "disk": {
+        "path": "/",
+        "format": "<span size='160%' rise='-2500'></span> {percentage_used}%",
+        "interval": 30,
+        "tooltip-format": "{path}: {used} / {total} ({percentage_used}%)"
+    },
+
+    "battery": {
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "<span size='120%'>󰁹</span> {capacity}%",
+        "format-charging": "<span size='160%' rise='-2500'>󰂄</span> {capacity}%",
+        "format-plugged": "<span size='160%' rise='-2500'>󱟢</span> {capacity}%",
+        "format-full": "<span size='160%' rise='-2500'>󱟢</span> {capacity}%",
+        "format-alt": "<span size='160%' rise='-2500'>󰁹</span> {time}"
+    },
+
+    "network": {
+        "format-wifi": "<span size='160%' rise='-2500'>󰖩</span> {signalStrength}%",
+        "format-ethernet": "<span size='160%' rise='-2500'>󰈀</span> {ipaddr}",
+        "format-disconnected": "<span size='160%' rise='-2500'>󰖪</span> Disconnected",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}",
+        "tooltip-format-wifi": "{essid} ({signalStrength}%)",
+        "tooltip-format-ethernet": "{ifname}: {ipaddr}",
+        "tooltip-format-disconnected": "Disconnected",
+        "max-length": 50,
+        "on-click-right": "nm-connection-editor"
+    },
+
+    "pulseaudio": {
+        "format": "<span size='160%' rise='-2500'>󰕾</span> {volume}%",
+        "format-muted": "<span size='160%' rise='-2500'>󰝟</span> Muted",
+        "on-click": "pavucontrol",
+        "scroll-step": 5
+    },
+
+    "mpris": {
+        "format": "<span size='160%' rise='-2500'>󰝚</span> {dynamic}",
+        "format-paused": "<span size='160%' rise='-2500'>󰝚</span> {dynamic} (paused)",
+        "max-length": 40,
+        "interval": 1,
+        "tooltip-format": "{player}: {dynamic}"
+    },
+
+    "custom/powermode": {
+        "format": "{}",
+        "return-type": "json",
+        "interval": 5,
+        "exec": "/home/franlol/.config/waybar/scripts/powermode.sh",
+        "on-click": "/home/franlol/.config/waybar/scripts/powermode.sh --click",
+        "restart-interval": 3
+    },
+
+    "custom/separator": {
+        "format": " | ",
+        "interval": 1
+    }
+}

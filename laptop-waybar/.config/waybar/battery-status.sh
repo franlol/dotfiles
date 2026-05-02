@@ -2,6 +2,15 @@
 
 bat_path=$(printf '%s\n' /sys/class/power_supply/BAT* | awk 'NR==1 { print; exit }')
 display_device="/org/freedesktop/UPower/devices/DisplayDevice"
+sleep_pid=""
+
+interrupt_sleep() {
+    if [ -n "$sleep_pid" ]; then
+        kill "$sleep_pid" 2>/dev/null || true
+    fi
+}
+
+trap 'interrupt_sleep' USR1
 
 escape_json() {
     printf '%s' "$1" | awk 'BEGIN { ORS = "" } { gsub(/\\/, "\\\\"); gsub(/"/, "\\\""); gsub(/\r/, "\\r"); gsub(/\n/, "\\n"); print }'
@@ -121,5 +130,8 @@ while :; do
     read_tooltip_state
     emit_json "$fast_percentage" "$fast_state" "$tooltip_text"
 
-    sleep 15
+    sleep 15 &
+    sleep_pid=$!
+    wait "$sleep_pid" 2>/dev/null || true
+    sleep_pid=""
 done

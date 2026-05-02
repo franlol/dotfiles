@@ -33,6 +33,7 @@
     },
     "custom/battery": {
         "exec": "/home/franlol/.config/waybar/battery-status.sh",
+        "on-click": "/home/franlol/.config/waybar/cycle-power-profile.sh",
         "return-type": "json",
         "restart-interval": 1,
         "format": "{text}"

@@ -53,4 +53,3 @@ precmd() {
 
 # build prompt
 PROMPT='$(real_time) $(directory)$(git_status)$(command_status) '
-

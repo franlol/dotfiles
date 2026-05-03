@@ -3,7 +3,7 @@
     "position": "top",
     "height": 36,
     "modules-left": [],
-    "modules-center": ["clock", "hyprland/workspaces", "pulseaudio", "network", "custom/battery"],
+    "modules-center": ["clock", "hyprland/workspaces", "pulseaudio", "backlight", "network", "custom/battery"],
     "modules-right": [],
     "hyprland/workspaces": {
         "persistent-workspaces": {
@@ -28,8 +28,15 @@
         "format": "{icon}",
         "format-muted": "󰝟",
         "format-icons": ["󰕿", "󰖀", "󰕾"],
+        "scroll-step": 1,
         "on-click": "pavucontrol",
         "tooltip-format": "{desc}\nVolume: {volume}%"
+    },
+    "backlight": {
+        "format": "{icon}",
+        "format-icons": ["󰃞", "󰃟", "󰃠"],
+        "scroll-step": 5,
+        "tooltip-format": "Brightness: {percent}%"
     },
     "custom/battery": {
         "exec": "/home/franlol/.config/waybar/battery-status.sh",

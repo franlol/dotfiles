@@ -43,6 +43,11 @@ window#waybar {
     color: #f38ba8;
 }
 
+#backlight {
+    color: #f9e2af;
+    margin: 0 14px 0 0;
+}
+
 #network {
     color: #a6e3a1;
     margin: 0 14px 0 0;

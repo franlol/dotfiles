@@ -110,6 +110,14 @@ Optional integrations enabled automatically when available:
 
 Some keybindings also try to use `hyprshutdown` when available, but fall back gracefully if it is not installed.
 
+Wallpaper collection for `waypaper` and `awww`:
+
+```bash
+git clone https://github.com/JaKooLit/Wallpaper-Bank.git ~/Pictures/wallpapers
+```
+
+This Hyprland setup expects wallpapers under `~/Pictures/wallpapers`.
+
 ### Deploy
 
 Clone the repository:

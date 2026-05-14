@@ -1,8 +1,8 @@
 #!/bin/sh
 
-bat_path=$(printf '%s\n' /sys/class/power_supply/BAT* | awk 'NR==1 { print; exit }')
 display_device="/org/freedesktop/UPower/devices/DisplayDevice"
 sleep_pid=""
+bat_path=""
 
 interrupt_sleep() {
     if [ -n "$sleep_pid" ]; then
@@ -11,6 +11,21 @@ interrupt_sleep() {
 }
 
 trap 'interrupt_sleep' USR1
+
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+resolve_battery_path() {
+    for candidate in /sys/class/power_supply/BAT*; do
+        if [ -d "$candidate" ]; then
+            printf '%s' "$candidate"
+            return 0
+        fi
+    done
+
+    return 1
+}
 
 escape_json() {
     printf '%s' "$1" | awk 'BEGIN { ORS = "" } { gsub(/\\/, "\\\\"); gsub(/"/, "\\\""); gsub(/\r/, "\\r"); gsub(/\n/, "\\n"); print }'
@@ -21,6 +36,12 @@ read_file() {
     [ -r "$file" ] || return 1
     IFS= read -r value < "$file" || return 1
     printf '%s' "$value"
+}
+
+extract_upower_value() {
+    key="$1"
+    info="$2"
+    printf '%s\n' "$info" | awk -F: -v key="$key" '$1 ~ key { sub(/^[ \t]+/, "", $2); print $2; exit }'
 }
 
 get_icon() {
@@ -75,7 +96,11 @@ emit_json() {
 }
 
 read_fast_state() {
-    if [ ! -d "$bat_path" ]; then
+    if [ -z "$bat_path" ] || [ ! -d "$bat_path" ]; then
+        bat_path=$(resolve_battery_path 2>/dev/null || true)
+    fi
+
+    if [ -z "$bat_path" ] || [ ! -d "$bat_path" ]; then
         fast_percentage=0
         fast_state="unknown"
         return
@@ -91,34 +116,31 @@ read_fast_state() {
 }
 
 read_tooltip_state() {
-    info=$(upower -i "$display_device" 2>/dev/null)
-    profile=$(powerprofilesctl get 2>/dev/null)
+    if command_exists upower; then
+        info=$(upower -i "$display_device" 2>/dev/null)
+    else
+        info=""
+    fi
+
+    if command_exists powerprofilesctl; then
+        profile=$(powerprofilesctl get 2>/dev/null)
+    else
+        profile=""
+    fi
+
+    [ -n "$profile" ] || profile="unknown"
 
     if [ -z "$info" ]; then
-        tooltip_text="Profile: ${profile:-unknown}"
+        tooltip_text="Profile: $profile"
         return
     fi
 
-    get_value() {
-        printf '%s\n' "$info" | awk -F: -v key="$1" '$1 ~ key { sub(/^[ \t]+/, "", $2); print $2; exit }'
-    }
+    tooltip_time=$(extract_upower_value "time to empty" "$info")
+    [ -n "$tooltip_time" ] || tooltip_time=$(extract_upower_value "time to full" "$info")
+    [ -n "$tooltip_time" ] || tooltip_time="N/A"
 
-    tooltip_time=$(get_value "time to empty")
-    if [ -z "$tooltip_time" ]; then
-        tooltip_time=$(get_value "time to full")
-    fi
-    if [ -z "$tooltip_time" ]; then
-        tooltip_time="N/A"
-    fi
-
-    tooltip_power=$(get_value "energy-rate")
-    if [ -z "$tooltip_power" ]; then
-        tooltip_power="N/A"
-    fi
-
-    if [ -z "$profile" ]; then
-        profile="unknown"
-    fi
+    tooltip_power=$(extract_upower_value "energy-rate" "$info")
+    [ -n "$tooltip_power" ] || tooltip_power="N/A"
 
     tooltip_text=$(printf 'Time: %s\rPower: %s\rProfile: %s' "$tooltip_time" "$tooltip_power" "$profile")
 }

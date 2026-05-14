@@ -20,11 +20,6 @@ window#waybar {
 	margin: 1px 4px 0;
 }
 
-#battery,
-#custom-battery {
-    margin-left: 6px;
-}
-
 #workspaces button {
     padding: 0;
     margin: 0 2px;
@@ -68,7 +63,7 @@ window#waybar {
 #battery,
 #custom-battery {
     color: #f9e2af;
-    margin-left: 6px;
+    margin-left: 0;
 }
 
 #battery.good,
